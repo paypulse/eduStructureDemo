@@ -9,9 +9,14 @@ import javax.transaction.Transactional;
 @Transactional
 @Service
 public class sampleServiceImpl implements sampleService {
-
     /**
      * 구조 sample
      * */
+    @Override
+    public int sampleCnt() {
+        return 0;
+    }
+
+
 
 }

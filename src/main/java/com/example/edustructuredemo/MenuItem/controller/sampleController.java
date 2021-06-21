@@ -27,7 +27,7 @@ public class sampleController {
     @GetMapping("/edulab/menuItem/cnt")
     public int sampleTest(HttpServletRequest req, HttpServletResponse res) throws Exception{
 
-        return 0;
+        return sample.sampleCnt();
     }
 
 
