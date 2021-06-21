@@ -16,12 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 public class sampleController {
 
     @Autowired
-    private sampleService sampleService;
-
-
-    public void setSampleService(sampleService sampleService){
-        this.sampleService = sampleService;
-    }
+    private sampleService sample;
 
 
     /**

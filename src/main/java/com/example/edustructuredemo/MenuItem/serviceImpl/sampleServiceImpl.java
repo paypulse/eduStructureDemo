@@ -1,18 +1,14 @@
 package com.example.edustructuredemo.MenuItem.serviceImpl;
 
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.edustructuredemo.MenuItem.service.sampleService;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
-@Slf4j
 @Transactional
 @Service
-public class sampleServiceImpl {
-
-
+public class sampleServiceImpl implements sampleService {
 
     /**
      * 구조 sample
