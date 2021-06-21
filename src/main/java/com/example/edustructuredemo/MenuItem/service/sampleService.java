@@ -4,7 +4,7 @@ public interface sampleService {
 
     /**
      * test service
-     * @param void
+     * @param
      * @return int
      * */
     int sampleCnt();
