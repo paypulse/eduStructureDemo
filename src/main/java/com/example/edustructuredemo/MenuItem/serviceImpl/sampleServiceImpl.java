@@ -25,6 +25,15 @@ public class sampleServiceImpl implements sampleService {
         return sample.selectCnt() ;
     }
 
+    /**
+     * TEST RESOURCE DOWNLOAD
+     * @param
+     * @return resource File
+     * */
+    @Override
+    public void resourceDownload() {
+
+    }
 
 
 }

@@ -9,4 +9,11 @@ public interface sampleService {
      * */
     int sampleCnt();
 
+
+    /**
+     * TEST RESOURCE DOWNLOAD
+     * @param
+     * @return resource File
+     * */
+    void resourceDownload();
 }
