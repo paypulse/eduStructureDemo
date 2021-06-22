@@ -6,5 +6,5 @@ import org.apache.ibatis.annotations.Mapper;
 public interface sampleDao {
 
     //test count
-    int selectCnt();
+    public int selectCnt();
 }
