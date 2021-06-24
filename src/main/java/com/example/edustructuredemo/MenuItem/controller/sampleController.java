@@ -1,24 +1,28 @@
 package com.example.edustructuredemo.MenuItem.controller;
 
 import com.example.edustructuredemo.MenuItem.service.sampleService;
+
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.MediaType;
+
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.FileCopyUtils;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.net.URLConnection;
+import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 
@@ -28,12 +32,14 @@ import java.util.zip.ZipOutputStream;
 public class sampleController {
     private static final Logger logger = LoggerFactory.getLogger(sampleController.class);
 
-    //file path
-    private static final String External_fila_path = "https://file.total-system.co.kr/atest/";
+    //리소스 경로
+    private static final String resourceFilePath = "http://211.34.230.55/atest/";
+
+    //출력 파일 경로
+   // private static final String outputFilePath = "/data/user/";
 
     @Autowired
     private sampleService sample;
-
 
 
     /**
@@ -53,23 +59,25 @@ public class sampleController {
      * @return resource
      * */
     @RequestMapping(value="/download", method =RequestMethod.POST)
-    public void downloadResource(HttpServletRequest req, HttpServletResponse res) throws Exception{
+    public void  downloadResource(HttpServletRequest req, HttpServletResponse res, @RequestParam String filename) throws Exception{
 
+        String str = resourceFilePath +filename;
+        Path path = Paths.get(str);
 
-        //log.info(file.getName().toString());
+        ZipOutputStream zipOut = new ZipOutputStream(res.getOutputStream());
+        FileSystemResource resource = new FileSystemResource(path.toString());
+        ZipEntry zipEntry = new ZipEntry(resource.getFilename());
+        zipEntry.setSize(resource.contentLength());
+        zipOut.putNextEntry(zipEntry);
+        StreamUtils.copy(resource.getInputStream(), zipOut);
+        zipOut.closeEntry();
 
-       // String mimeType = URLConnection.guessContentTypeFromName(file.getName());
-       // res.setContentType(mimeType);
-       // res.setHeader("Content-Disposition",String.format("inline; filename=\"" + file.getName() +"\""));
-      //  res.setContentLength((int) file.length());
-        //InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+        zipOut.finish();
+        zipOut.close();
+        res.setStatus(HttpServletResponse.SC_OK);
+        res.addHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"");
 
-        //log.info(inputStream.toString());
     }
-
-
-
-
 
 
 
