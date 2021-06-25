@@ -8,22 +8,26 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
+import org.springframework.beans.factory.annotation.Value;
+
+import org.springframework.context.support.GenericXmlApplicationContext;
+
+import org.springframework.core.io.*;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.File;
+import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
+import java.nio.file.StandardCopyOption;
 
 
 @Slf4j
@@ -33,10 +37,15 @@ public class sampleController {
     private static final Logger logger = LoggerFactory.getLogger(sampleController.class);
 
     //리소스 경로
-    private static final String resourceFilePath = "http://211.34.230.55/atest/";
+    @Value("${file.location}")
+    private String resourceFilePath;
 
-    //출력 파일 경로
-   // private static final String outputFilePath = "/data/user/";
+    //로컬 리소스 다운 경로
+    @Value("${file.local.storage}")
+    private String localStroagePath;
+
+    @Autowired
+    ResourceLoader resourceLoader;
 
     @Autowired
     private sampleService sample;
@@ -59,23 +68,24 @@ public class sampleController {
      * @return resource
      * */
     @RequestMapping(value="/download", method =RequestMethod.POST)
-    public void  downloadResource(HttpServletRequest req, HttpServletResponse res, @RequestParam String filename) throws Exception{
+    public ResponseEntity<?>  downloadResource(HttpServletRequest req, HttpServletResponse res, @RequestParam String filename) throws Exception{
 
-        String str = resourceFilePath +filename;
-        Path path = Paths.get(str);
+        String path = resourceFilePath + filename;
 
-        ZipOutputStream zipOut = new ZipOutputStream(res.getOutputStream());
-        FileSystemResource resource = new FileSystemResource(path.toString());
-        ZipEntry zipEntry = new ZipEntry(resource.getFilename());
-        zipEntry.setSize(resource.contentLength());
-        zipOut.putNextEntry(zipEntry);
-        StreamUtils.copy(resource.getInputStream(), zipOut);
-        zipOut.closeEntry();
+        try(InputStream in1 = new URL(path).openStream()){
+            Resource toRes = new FileSystemResource(localStroagePath);
+            Path target = Paths.get(localStroagePath);
+            long result =  Files.copy(in1, target,StandardCopyOption.REPLACE_EXISTING);
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
+            headers.add("Pragma", "no-cache");
+            headers.add("Expires", "0");
 
-        zipOut.finish();
-        zipOut.close();
-        res.setStatus(HttpServletResponse.SC_OK);
-        res.addHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"");
+            return ResponseEntity.ok()
+                .headers(headers)
+                .body(result);
+        }
+
 
     }
 
