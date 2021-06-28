@@ -14,6 +14,7 @@ import org.springframework.context.support.GenericXmlApplicationContext;
 
 import org.springframework.core.io.*;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +29,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Map;
 
 
 @Slf4j
@@ -76,6 +78,7 @@ public class sampleController {
             Resource toRes = new FileSystemResource(localStroagePath);
             Path target = Paths.get(localStroagePath);
             long result =  Files.copy(in1, target,StandardCopyOption.REPLACE_EXISTING);
+
             HttpHeaders headers = new HttpHeaders();
             headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
             headers.add("Pragma", "no-cache");
@@ -83,11 +86,28 @@ public class sampleController {
 
             return ResponseEntity.ok()
                 .headers(headers)
-                .body(result);
+                .body(Files.copy(in1, target,StandardCopyOption.REPLACE_EXISTING));
         }
+    }
 
+    /**
+     * download to App sample
+     * @param
+     * @return resource
+     * */
+    @RequestMapping(value="/sampeDownload", method =RequestMethod.POST)
+    public ResponseEntity sampleDownload(HttpServletRequest req, HttpServletResponse res, @RequestParam String filename) throws Exception{
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("header", "header");
+        String path = resourceFilePath + filename+".zip";
+
+
+        return new ResponseEntity<Map<String,String>>(sample.sampleDownload(path,filename), httpHeaders, HttpStatus.OK);
 
     }
+
+
 
 
 

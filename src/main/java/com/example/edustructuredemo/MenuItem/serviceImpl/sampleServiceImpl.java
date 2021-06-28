@@ -12,6 +12,8 @@ import com.example.edustructuredemo.MenuItem.domain.sampleDao;
 import javax.transaction.Transactional;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 
 @Transactional
 @Service
@@ -45,6 +47,21 @@ public class sampleServiceImpl implements sampleService {
 
     }
 
+    /**
+     * sampel download api
+     * @param
+     * @return string
+     * */
+    @Override
+    public Map<String,String> sampleDownload(String fileDirectory,String filename) {
+
+        Map<String, String> result = new HashMap<>();
+
+        result.put("filePath",fileDirectory);
+        result.put("content-type","application/zip");
+        result.put("fileName",filename+".zip");
+        return result;
+    }
 
 
 }

@@ -2,6 +2,8 @@ package com.example.edustructuredemo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.PropertySource;
 
 /**
@@ -10,7 +12,13 @@ import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
 @PropertySource("classpath:/properties/application-dev.properties")
-public class EduStructureDemoApplication {
+public class EduStructureDemoApplication extends SpringBootServletInitializer {
+
+    /*war 배포를 위한 소스 */
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder){
+        return builder.sources(EduStructureDemoApplication.class);
+    }
 
     public static void main(String[] args) {
 
