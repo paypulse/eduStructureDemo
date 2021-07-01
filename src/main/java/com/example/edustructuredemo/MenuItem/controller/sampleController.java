@@ -29,6 +29,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -58,10 +59,12 @@ public class sampleController {
      * @param
      * @return
      * */
-    @RequestMapping(value="/cnt", method = RequestMethod.GET)
-    public int sampleTest(HttpServletRequest req, HttpServletResponse res) throws Exception{
+    @GetMapping(value="/cnt")
+    public Map<String, Integer> sampleTest(HttpServletRequest req, HttpServletResponse res) throws Exception{
 
-        return sample.sampleCnt();
+        Map<String, Integer> result = new HashMap<>();
+        result.put("data", sample.sampleCnt());
+        return result;
     }
 
     /**

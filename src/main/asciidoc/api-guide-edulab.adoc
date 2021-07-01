@@ -1,19 +1,23 @@
-= RESTful Notes API Guide
-:doctype: book
+ifndef::snippets[]
+:snippets: ../../../build/generated-snippets
+endif::[]
+:doctype: sampleStructureTest
 :icons: font
 :source-highlighter: highlightjs
 :toc: left
-:toclevels: 4
-:sectnums:
+:toclevels: 2
 :sectlinks:
-:sectanchors:
+:operation-http-request-title: Example Request
+:operation-http-response-title: Example Response
 
-[[api]]
-== Book Api
-api 에 관련된 설명을 이곳에 적습니다.
+[[resources]]
+= Resources
 
-include::{snippets}/book/curl-request.adoc[]
-include::{snippets}/book/http-request.adoc[]
-include::{snippets}/book/path-parameters.adoc[]
-include::{snippets}/book/http-response.adoc[]
-include::{snippets}/book/response-fields.adoc[]
+[[resources-sampleStructureTest]]
+== sampleStructureTest
+
+[[resources-sampleStructureTest]]
+=== 정보 가져 오기
+include::{snippets}/sampleStructureTest/http-response.adoc[]
+include::{snippets}/sampleStructureTest/response-fields.adoc[]
+
